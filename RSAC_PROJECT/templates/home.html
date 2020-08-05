@@ -1,41 +1,149 @@
-
 {% load static %}
 
+
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <title>RSAC HOME APP</title>
-  </head>
+<html>
 
-  <!-- some styling for map  div-->
-  <style type="text/css">
-      html, body, #map
-      {
-        margin: 0px;
-        height: 100%;
-        width: 100%;
-      }
-  </style>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>test site</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+</head>
+
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar" >
+
+            <div class="sidebar-header">
+                <h3>REMOTE SENSING APPLICATIONS CENTRE U.P.</h3>
+                <strong>RSAC U.P.</strong>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="#homeSubmenu"  data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-search"></i>
+                         Layer Selector
+                    </a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <li>
+                                <label>Choose a layer set:</label>
+                                <select name="layer set" id="select_overlay_layer_set" style="width: 100%;text-align:center;" onchange="manage_selected_layer_set_controller(this)">
+                                  <option value="None" selected >None</option>
+                                  
+                                </select>   
+                        </li>
+                        
+                    </ul>
+                </li>
+                <li>
+                    <a href="about.html">
+                        <i class="fas fa-briefcase"></i>
+                        About
+                    </a>
+                   
+                </li>
+             
+                <li>
+                    <a href="contact.html">
+                        <i class="fas fa-paper-plane"></i>
+                        Contact
+                    </a>
+                </li>
+            </ul>
+
+           <!--  <ul class="list-unstyled CTAs">
+                <li>
+                    <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
+                </li>
+                <li>
+                    <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
+                </li>
+            </ul> -->
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+
+            <div id = 'nav_top'>
+                
+                  <!-- div for lat long -->
+                <div style="float: right;">
+                    
+                </div>
+
+                <div style="float: left;margin: 5px;width:40%;color:white;font-size: 40px">
+                    WEB GIS PORTAL
+                </div>
+                <!-- div for base layer selector and lat lon info-->
+                <div  style="float: right;margin: 5px;width:20%">
+                    <div style="color: white;text-align: center;">Change Base Layer</div>
+                    <select id='select_base_layer' style="width: 100%;opacity: 0.7" onchange="manage_selected_base_layer(this)">
+
+                    </select>    
+
+                    <div id = "latlon" style="width:100%;color: white;font-size: 10px;text-align:center;" >
+                    </div> 
+
+                </div>
+
+              
+            </div>>
+           
+
+            
+            <div id="map"></div>
   
-
-  <body>
-    
-    <div id="map"></div>
   
-    <!-- calling required scripts : -->
-    <!-- call the following scripts as it is -->
-    <!-- for customization... add css and js above or below this block -->
+        </div>
+    </div>
 
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <!-- jquery with AJAX -->
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+
+<!-- AJAX script to toggle side bar button -->
+<!--     <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+ -->
+
+    <!-- leaflet start -->
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
     <!--[if lte IE 8]>
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
     <![endif]-->
-    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+   
     <script type="text/javascript" src="{% static 'js/leaflet_popup_getFeatInfo_extension.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/map_and_layer_definitions.js' %}"></script>
+    
     <script type="text/javascript" src="{% static 'js/handle_map.js' %}"></script>
-  
-  </body>
+</body>
+
 </html>

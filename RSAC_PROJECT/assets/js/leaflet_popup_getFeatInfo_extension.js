@@ -1,4 +1,9 @@
-      
+ /////// DEVELOPER : PRAJJWAL SINGH : 
+ /////// GITHUB: PrajjwalS
+ /////// EMAIL : prajjwals12@gmail.com
+
+
+ ////////// LEAFLET EXTENSION JS PLUGIN FOR POP ATTRIBUTES WITH GEOSERVER WMS/////     
   L.TileLayer.WMS_with_popup_attributes = L.TileLayer.WMS.extend({
   
   onAdd: function (map) {
@@ -6,6 +11,9 @@
     //   Register a click listener, then do all the upstream WMS things
     L.TileLayer.WMS.prototype.onAdd.call(this, map);
     map.on('click', this.getFeatureInfo, this);
+
+    map.fitBounds(this.options.bounding_extents);
+
   },
   
   onRemove: function (map) {
@@ -89,6 +97,8 @@
       var dummy_content =  content.split(/\r?\n/);
       var att_list = []; 
 
+     
+      
       for(var i=0;i<dummy_content.length;i++)
         if( tag_th_regx.test(dummy_content[i]) )
           {
@@ -111,6 +121,8 @@
       var body = '';
       th_tags ='';
       td_tags ='';
+
+      
       for(var i=0;i<att_list.length;i++)
       {
         if(pop_attr[att_list[i]])

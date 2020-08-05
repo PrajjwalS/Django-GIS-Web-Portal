@@ -11,6 +11,9 @@
     //   Register a click listener, then do all the upstream WMS things
     L.TileLayer.WMS.prototype.onAdd.call(this, map);
     map.on('click', this.getFeatureInfo, this);
+
+    map.fitBounds(this.options.bounding_extents);
+
   },
   
   onRemove: function (map) {
