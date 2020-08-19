@@ -1,4 +1,6 @@
 
+
+
 ////////// poppulating base layer selector with options /////////
 ////////// and selecting and applying default base layer/////////
 
@@ -71,32 +73,44 @@ function manage_selected_layer_set_controller(selectObject)
 }
 //////////////////////////////////////////////////
 
+//////// managing buffer radius input for point layers /////
+current_point_buffer_layer = L.geoJSON();
+function manage_buffer_radius_input(input)
+{ 
+
+  current_point_buffer_layer.remove();
+  if(input == 0 || input.value == 0)
+    return;
+  
+  radius_km = input.value;
+   map.eachLayer(function (layer) 
+   {
+     if(layer.options.pane=="overlay_pane")
+      { 
+         pointbufferJSON = turf.buffer(layer.toGeoJSON(),radius_km, {units : 'kilometers'});
+         
+         current_point_buffer_layer = L.geoJSON(pointbufferJSON,
+            {  
+              style : {color:'yellow',dashArray:'5.5',fillOpacity:0.2}
+
+            },
+         );
+         current_point_buffer_layer.addTo(map);
+      }
+   });
+
+}
+
+//////////////////////////////////////////////////////
+
 
 // UI interaction changes 
 map.on('mousemove', function(e) 
 {
-   
-     // document.getElementById("latitude").innerHTML = "" + e.latlng.lat;    
-     // document.getElementById("longitude").innerHTML = "" + e.latlng.lng;
-       document.getElementById("latlon").innerHTML = "Lat: "+e.latlng.lat.toFixed(6)+" Lon: "+e.latlng.lng.toFixed(6);    
-  
-      $('#sidebar').addClass('active');
-
-
+  document.getElementById("latlon").innerHTML = "Lat: "+e.latlng.lat.toFixed(6)+" Lon: "+e.latlng.lng.toFixed(6);
 });
 map.on('mouseout', function(e) 
 {
-    
-     // document.getElementById("latitude").innerHTML = "" ;    
-     // document.getElementById("longitude").innerHTML = "";   
-            document.getElementById("latlon").innerHTML = "";    
-
-      $('#sidebar').removeClass('active');
-
-});
-map.on('mouseover', function(e) 
-{ 
-      $('#sidebar').addClass('active');
-
+  document.getElementById("latlon").innerHTML = "";    
 });
 

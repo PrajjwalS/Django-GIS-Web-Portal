@@ -4,19 +4,19 @@
 //  2nd : over_layers
 
 
-//defining the map
+
+// //defining the map
 var map = L.map('map', 
 {
         zoom: 2,
         center:[0,0],
 });
 
-
-// defining panes for base and overlay layers
+//defining panes for base and overlay layers
 map.createPane('base_pane');
 map.createPane('overlay_pane');
 map.getPane('base_pane').style.zIndex = 1;
-map.getPane('overlay_pane').style.zIndex = 2;
+map.getPane('overlay_pane').style.zIndex = 200;
 
 
 
@@ -109,7 +109,16 @@ var overlay_layer_sets =
             pane: 'overlay_pane' ,
             popup_attributes : {'dt_code':'DISTRICT CODE','dist_name':'DISTRICT NAME','st_code':'STATE CODE','st_name':'STATE NAME'},
             bounding_extents : [ [8.076644669515929,68.09347709739018], [37.07719207475452,97.41149826013668] ]
-        })
+        }),
+        'Point Layer' : L.geoJSON_with_popup_attributes("http://localhost:8080/geoserver/tiger/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tiger%3Apoi&maxFeatures=50&outputFormat=application%2Fjson",
+         //options:
+        { 
+          
+          pane:'overlay_pane',
+          popup_attributes : {'NAME':'NAME','MAINPAGE':'MAINPAGE',},
+          // no need to put layer name or bounding extents 
+        }
+        ),
 	},
 
 	"Indonesia" :
@@ -160,8 +169,3 @@ var overlay_layer_sets =
 		},
 };
 
-
-
-// Exporting 
-
-// export { base_layers, overlay_layer_sets };

@@ -28,6 +28,7 @@
     var url = this.getFeatureInfoUrl(evt.latlng),
         showResults = L.Util.bind(this.showGetFeatureInfo, this);
     $.ajax({
+      async:false,
       url: url,
       success: function (data, status, xhr) {
         var err = typeof data === 'string' ? null : data;
@@ -80,8 +81,10 @@
     // check if content doesnt have a table row to show
     // will occur on clicking on pixels having no data attributes
     if(!content.includes("<tr>"))
-      return;
+    { 
 
+      return;
+    }
 
     // check if layer asked for specific attributes from attribute table
     // if no... go ahead and make pop from content
@@ -146,4 +149,87 @@
 L.tileLayer.WMS_with_popup_attributes = function (url, options) 
 {
   return new L.TileLayer.WMS_with_popup_attributes(url, options);  
+};
+
+
+
+
+
+
+
+
+////////////////////////// for geoJson WFS //////////////////////
+ ////////// LEAFLET EXTENSION JS PLUGIN FOR POP ATTRIBUTES WITH GEOSERVER WMS/////     
+ L.GeoJson_with_popup_attributes = L.GeoJSON.extend
+ (
+  { 
+    onAdd: function (map) 
+    {
+      
+      L.GeoJSON.prototype.onAdd.call(this, map);
+      map.fitBounds(this.getBounds());
+
+      // showing div for point buffer input
+      bi = document.getElementById("buffer_input")
+      bi.style.display = "block";
+      br = document.getElementById("buffer_radius")
+      br.value='0';
+      manage_buffer_radius_input(0)
+    },
+  
+    onRemove: function (map) 
+    {
+      L.GeoJSON.prototype.onRemove.call(this, map);
+      bi = document.getElementById("buffer_input")
+      bi.style.display = "none";
+      br = document.getElementById("buffer_radius")
+      br.value='0';
+       manage_buffer_radius_input(0)
+    },
+  
+ }
+);
+
+
+L.geoJSON_with_popup_attributes = function (geojsonurl, options) 
+{ 
+  var obj=10;
+  $.ajax({
+    async: false,
+  dataType: "json",
+  url:geojsonurl,
+  success: hey,
+});
+  function hey (layer_geojson_obj)
+{
+  
+   geoJSONobj = layer_geojson_obj;
+ 
+}
+
+
+  
+  // adding popupattributes to each feature
+  attr_dict = options["popup_attributes"];
+   options["onEachFeature"]= function (feature, marker) 
+   {
+            //console.log(feature.properties['NAME']);
+            var header = '<html><head><title>Geoserver GetFeatureInfo output</title></head><style type="text/css">table.featureInfo, table.featureInfo td, table.featureInfo th {border:1px solid #ddd;border-collapse:collapse;margin:0;padding:0;font-size: 90%;padding:.2em .1em;}table.featureInfo th {padding:.2em .2em;font-weight:bold;background:#eee;}table.featureInfo td{background:#fff;}table.featureInfo tr.odd td{background:#eee;}table.featureInfo caption{text-align:left;font-size:100%;font-weight:bold;padding:.2em .2em;}</style><body><table class="featureInfo">';
+            var footer = '</table><br/></body></html>';
+            //var tmplt = header;
+            var th_list ="";
+            var td_list ="";
+            
+            Object.keys(attr_dict).forEach(function loop(key)
+              {
+                  th_list += "<th>"+attr_dict[key]+"</th>";
+                  td_list += "<td>"+feature.properties[key]+"</td>";
+              });
+
+            var tmplt =header +"<tr>" +th_list+"</tr>" + "<tr>" + td_list+ "</tr>" + footer;
+            marker.bindPopup(tmplt);
+            
+
+    };
+  return new L.GeoJson_with_popup_attributes(geoJSONobj, options);  
 };

@@ -27,7 +27,7 @@
 
     <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar" >
+        <nav id="sidebar" class = 'active' >
 
             <div class="sidebar-header">
                 <h3>REMOTE SENSING APPLICATIONS CENTRE U.P.</h3>
@@ -97,13 +97,19 @@
 
                     </select>    
 
-                    <div id = "latlon" style="width:100%;color: white;font-size: 10px;text-align:center;" >
+                    <div id = "latlon" style="width:100%;color: white;font-size: 10px;text-align:center;" >______
                     </div> 
 
                 </div>
+                <!-- div for only when point layer is there.. to input radius of buffer -->
+                <div id = 'buffer_input' style="color:white;display: none;float:right;margin: 5px;width:20%">
+                    Add Buffer to Points<br>
+                    Set Radius in KM
+                    <input type="number" style="width: 70px;opacity: 0.7" id="buffer_radius" min='0' onchange="manage_buffer_radius_input(this)">
+                </div>
 
               
-            </div>>
+            </div>
            
 
             
@@ -114,7 +120,10 @@
     </div>
 
     <!-- jquery with AJAX -->
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
     <!-- Popper.JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
@@ -136,14 +145,17 @@
     <!--[if lte IE 8]>
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
     <![endif]-->
-
+    <script src='https://unpkg.com/@turf/turf/turf.min.js'></script>
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.js"></script>
     <script type="text/javascript" src="{% static 'js/leaflet_popup_getFeatInfo_extension.js' %}"></script>
-
+     <script src="{% static 'leaflet_browser_print/dist/leaflet.browser.print.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/map_and_layer_definitions.js' %}"></script>
     
     <script type="text/javascript" src="{% static 'js/handle_map.js' %}"></script>
+
+   
+    
 </body>
 
 </html>

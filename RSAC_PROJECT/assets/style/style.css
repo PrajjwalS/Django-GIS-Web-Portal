@@ -65,8 +65,9 @@ span {
 
 /* Side bar base background*/
 #sidebar {
-    min-width: 250px;
-    max-width: 250px;
+    /*min-width: 250px;
+    max-width: 300px;*/
+    width : 30%;
     /*background: #5085A5;*/
     opacity: 0.8;
     color: #FFFFFF;
