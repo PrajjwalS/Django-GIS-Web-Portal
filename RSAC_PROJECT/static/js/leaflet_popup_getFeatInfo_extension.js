@@ -167,7 +167,7 @@ L.tileLayer.WMS_with_popup_attributes = function (url, options)
     {
       
       L.GeoJSON.prototype.onAdd.call(this, map);
-      map.fitBounds(this.getBounds());
+      //map.fitBounds(this.getBounds());
 
       // showing div for point buffer input
       bi = document.getElementById("buffer_input")
@@ -180,11 +180,21 @@ L.tileLayer.WMS_with_popup_attributes = function (url, options)
     onRemove: function (map) 
     {
       L.GeoJSON.prototype.onRemove.call(this, map);
-      bi = document.getElementById("buffer_input")
-      bi.style.display = "none";
+
+      count = 0;
+      map.eachLayer(function (layer) 
+      {
+          if(layer.options.pane=="overlay_marker_pane")
+            count++;
+      });
+      if(count == 1)
+      {
+        bi = document.getElementById("buffer_input")
+        bi.style.display = "none";
+      }
       br = document.getElementById("buffer_radius")
       br.value='0';
-       manage_buffer_radius_input(0)
+       manage_buffer_radius_input(0);
     },
   
  }

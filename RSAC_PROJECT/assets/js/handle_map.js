@@ -111,6 +111,6 @@ map.on('mousemove', function(e)
 });
 map.on('mouseout', function(e) 
 {
-  document.getElementById("latlon").innerHTML = "";    
+  document.getElementById("latlon").innerHTML = "______";    
 });
 
