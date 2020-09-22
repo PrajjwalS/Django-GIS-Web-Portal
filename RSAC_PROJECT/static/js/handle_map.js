@@ -12,8 +12,9 @@ for(i in Object.keys(base_layers))
    opt.innerHTML = Object.keys(base_layers)[i]; 
    base_select_tag.appendChild(opt);
 }
-var default_base_layer_name = "India Boundary";
+var default_base_layer_name = "Google Street Map";
 var current_base_layer = base_layers[default_base_layer_name];
+console.log(current_base_layer);
 base_select_tag.selectedIndex = Object.keys(base_layers).indexOf(default_base_layer_name);
 current_base_layer.addTo(map);
 
@@ -21,17 +22,15 @@ current_base_layer.addTo(map);
 
 
 
-////////// poppulating overlay layer set selector with options /////////
-var overlay_select_tag = document.getElementById("select_overlay_layer_set");
-for(i in Object.keys(overlay_layer_sets))
-{
-   var opt = document.createElement("option");
-   opt.value= Object.keys(overlay_layer_sets)[i];
-   opt.innerHTML = Object.keys(overlay_layer_sets)[i]; 
-   overlay_select_tag.appendChild(opt);
-}
-// by default selecting none (which is by default at index 0)
- overlay_select_tag.selectedIndex = 0;
+//////// poppulating overlay layer set selector with options /////////
+// var overlay_select_tag = document.getElementById("select_overlay_layer_set");
+// for(i in Object.keys(overlay_layer_sets))
+// {
+//    var opt = document.createElement("option");
+//    opt.value= Object.keys(overlay_layer_sets)[i];
+//    opt.innerHTML = Object.keys(overlay_layer_sets)[i]; 
+//    overlay_select_tag.appendChild(opt);
+// }
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -47,30 +46,43 @@ function manage_selected_base_layer(selectedObject)
 }
 ///////////////////////////////////////////////
 
+
+///// managing control for overlay layers ////
+// function manage_selected_layers(selectedObject)
+// {
+//   // this functions gets called when new overlay layer is selected from UI
+//   layer_control = L.control.layers(null,overlay_layer_sets);
+  
+// }
+layer_control = L.control.layers(null,overlay_layer_sets);
+layer_control.addTo(map);
+
+///////////////////////////////////////////////
+
 ///// managing control for overlay layer sets ////
-current_layer_control = L.control.layers();
-function manage_selected_layer_set_controller(selectObject) 
-{
-  // this function gets called when new layer set is selected from UI
-   map.eachLayer(function (layer) 
-   {
-     if(layer.options.pane=="overlay_pane" || layer.options.pane=="overlay_marker_pane")
-       map.removeLayer(layer);
-   });
-   current_layer_control.remove();
+// current_layer_control = L.control.layers();
+// function manage_selected_layer_set_controller(selectObject) 
+// {
+//   // this function gets called when new layer set is selected from UI
+//    map.eachLayer(function (layer) 
+//    {
+//      if(layer.options.pane=="overlay_pane" || layer.options.pane=="overlay_marker_pane")
+//        map.removeLayer(layer);
+//    });
+//    current_layer_control.remove();
 
-   var val = selectObject.value;
+//    var val = selectObject.value;
    
-   if(val == "None")
-    return;
-   else 
-     current_layer_control = L.control.layers(null, overlay_layer_sets[val],overlay_layer_sets[val]);
+//    if(val == "None")
+//     return;
+//    else 
+//      current_layer_control = L.control.layers(null, overlay_layer_sets[val],overlay_layer_sets[val]);
 
-   // adding selected layer set's controller to map
-   current_layer_control.addTo(map);
-   // applying selected layer set's first layer to map
-   overlay_layer_sets[val][Object.keys(overlay_layer_sets[val])[0]].addTo(map);
-}
+//    // adding selected layer set's controller to map
+//    current_layer_control.addTo(map);
+//    // applying selected layer set's first layer to map
+//    overlay_layer_sets[val][Object.keys(overlay_layer_sets[val])[0]].addTo(map);
+// }
 //////////////////////////////////////////////////
 
 //////// managing buffer radius input for point layers /////
@@ -124,3 +136,26 @@ map.on('mouseout', function(e)
   document.getElementById("latlon").innerHTML = "______";    
 });
 
+
+
+// HANDLING THE CHART UI
+function draw_chart(chart_title, list_x_y)
+{
+    
+
+     var chart =  new CanvasJS.Chart("chartContainer", 
+        {
+          title:{
+            text: chart_title,              
+          },
+          data: [              
+          {
+            // Change type to "doughnut", "line", "splineArea", etc.
+            type: "doughnut",
+            dataPoints: list_x_y,
+          }
+          ]
+        });
+     chart.render();
+
+};

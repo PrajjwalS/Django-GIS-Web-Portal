@@ -6,13 +6,51 @@
  ////////// LEAFLET EXTENSION JS PLUGIN FOR POP ATTRIBUTES WITH GEOSERVER WMS/////     
   L.TileLayer.WMS_with_popup_attributes = L.TileLayer.WMS.extend({
   
-  onAdd: function (map) {
+  onAdd: function (map) 
+  {
     // Triggered when the layer is added to a map.
     //   Register a click listener, then do all the upstream WMS things
     L.TileLayer.WMS.prototype.onAdd.call(this, map);
     map.on('click', this.getFeatureInfo, this);
 
     map.fitBounds(this.options.bounding_extents);
+
+
+      // below is code for managing chartContainer
+      chartContainer_div = document.getElementById("chartContainer");
+      if(this.options.geojsonurl)
+      {
+            list_x_y = [];
+            // bringing in the geojson object
+            var obj=10;
+            $.ajax({
+              async: false,
+              dataType: "json",
+              url:this.options.geojsonurl,
+              success: hey,
+            });
+            function hey (layer_geojson_obj)
+            { 
+              geoJSONobj = layer_geojson_obj;
+            }
+            for (var i = 0; i < geoJSONobj.features.length; i++) 
+            {
+              var currentFeature = geoJSONobj.features[i];
+              //console.log( currentFeature.properties[this.options.x_plot_attribute] +"\t"+  currentFeature.properties[this.options.y_plot_attribute]);
+              list_x_y.push({label: currentFeature.properties[this.options.x_plot_attribute] , y:currentFeature.properties[this.options.y_plot_attribute]});
+            }
+
+
+            chartContainer_div.style.display = "block";
+            chartContainer_div.style.height = "300px";
+            chartContainer_div.style.width = "100%";
+            draw_chart(this.options.chart_title,list_x_y);
+            
+      }
+      else
+      {
+            chartContainer_div.style.display = "none";
+      }
 
   },
   
@@ -167,7 +205,7 @@ L.tileLayer.WMS_with_popup_attributes = function (url, options)
     {
       
       L.GeoJSON.prototype.onAdd.call(this, map);
-      map.fitBounds(this.getBounds());
+      //map.fitBounds(this.getBounds());
 
       // showing div for point buffer input
       bi = document.getElementById("buffer_input")
@@ -180,11 +218,21 @@ L.tileLayer.WMS_with_popup_attributes = function (url, options)
     onRemove: function (map) 
     {
       L.GeoJSON.prototype.onRemove.call(this, map);
-      bi = document.getElementById("buffer_input")
-      bi.style.display = "none";
+
+      count = 0;
+      map.eachLayer(function (layer) 
+      {
+          if(layer.options.pane=="overlay_marker_pane")
+            count++;
+      });
+      if(count == 1)
+      {
+        bi = document.getElementById("buffer_input")
+        bi.style.display = "none";
+      }
       br = document.getElementById("buffer_radius")
       br.value='0';
-       manage_buffer_radius_input(0)
+       manage_buffer_radius_input(0);
     },
   
  }
@@ -231,5 +279,10 @@ L.geoJSON_with_popup_attributes = function (geojsonurl, options)
             
 
     };
+    //console.log(geoJSONobj);
+
+    var featureNames = [];
+
+
   return new L.GeoJson_with_popup_attributes(geoJSONobj, options);  
 };

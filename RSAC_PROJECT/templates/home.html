@@ -25,10 +25,15 @@
 
 <body>
 
+    
+    
+
     <div class="wrapper">
+
         <!-- Sidebar  -->
         <nav id="sidebar" class = 'active' >
-
+             <!-- chart container dashboard -->
+                      <div id="chartContainer" style="height: 300px; width: 100%;display:none;background-color: yellow; "></div>
             <div class="sidebar-header">
                 <h3>REMOTE SENSING APPLICATIONS CENTRE U.P.</h3>
                 <strong>RSAC U.P.</strong>
@@ -37,34 +42,37 @@
             <ul class="list-unstyled components">
                 <li class="active">
                     <a href="#homeSubmenu"  data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-search"></i>
-                         Layer Selector
+                        <i class="fas fa-map fa-2x"></i>
+                         <!-- Layer Selector -->
                     </a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
-                                <label>Choose a layer set:</label>
-                                <select name="layer set" id="select_overlay_layer_set" style="width: 100%;text-align:center;" onchange="manage_selected_layer_set_controller(this)">
-                                  <option value="None" selected >None</option>
-                                  
-                                </select>   
+                                <label>Choose a base map:</label>
+                                    <select id='select_base_layer' style="width: 100%;opacity: 0.7" onchange="manage_selected_base_layer(this)">
+
+                                    </select>   
                         </li>
                         
                     </ul>
                 </li>
                 <li>
                     <a href="about.html">
-                        <i class="fas fa-briefcase"></i>
-                        About
+                        <i class="fas fa-briefcase fa-2x"></i>
+                        <!-- About -->
                     </a>
                    
                 </li>
-             
+
                 <li>
                     <a href="contact.html">
-                        <i class="fas fa-paper-plane"></i>
-                        Contact
+                        <i class="fas fa-paper-plane fa-2x"></i>
+                       <!--  Contact -->
                     </a>
                 </li>
+                <li>    
+                   
+                </li>
+                
             </ul>
 
            <!--  <ul class="list-unstyled CTAs">
@@ -81,26 +89,26 @@
         <div id="content">
 
             <div id = 'nav_top'>
-                
-                  <!-- div for lat long -->
-                <div style="float: right;">
-                    
-                </div>
 
-                <div style="float: left;margin: 5px;width:40%;color:white;font-size: 40px">
+                <div style="float: left;margin: 5px;width:40%;color:#000000;font-size: 40px">
                     WEB GIS PORTAL
                 </div>
-                <!-- div for base layer selector and lat lon info-->
-                <div  style="float: right;margin: 5px;width:20%">
-                    <div style="color: white;text-align: center;">Change Base Layer</div>
-                    <select id='select_base_layer' style="width: 100%;opacity: 0.7" onchange="manage_selected_base_layer(this)">
-
-                    </select>    
-
-                    <div id = "latlon" style="width:100%;color: white;font-size: 10px;text-align:center;" >______
-                    </div> 
-
+                <div  style="float: right;margin-top: 12px; width:10%;color:#FFFFFF;font-size: 20px;padding: 10px;">
+                    
+                    <a href="login.html">
+                        <i class="fas fa-user"></i>
+                        LogIn
+                    </a>
                 </div>
+                <div  style="float: right;margin-top: 12px; width:16%;color:#FFFFFF;font-size: 20px;padding: 10px;">
+                    
+                    <a href="dashboard.html">
+                        <i class="fas fa-chart-bar"></i>
+                        Dashboard
+                    </a>
+                </div>
+                
+
                 <!-- div for only when point layer is there.. to input radius of buffer -->
                 <div id = 'buffer_input' style="color:white;display: none;float:right;margin: 5px;width:20%">
                     Add Buffer to Points<br>
@@ -113,10 +121,14 @@
            
 
             
-            <div id="map"></div>
+                <div id="map" style="z-index: 100;"></div>
+                
   
-  
+                <div id = "latlon"  style="width:100%;color: white;font-size: 15px;text-align:center;" >
+                </div> 
+            
         </div>
+
     </div>
 
     <!-- jquery with AJAX -->
@@ -145,16 +157,36 @@
     <!--[if lte IE 8]>
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
     <![endif]-->
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src='https://unpkg.com/@turf/turf/turf.min.js'></script>
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.js"></script>
     <script type="text/javascript" src="{% static 'js/leaflet_popup_getFeatInfo_extension.js' %}"></script>
-     <script src="{% static 'leaflet_browser_print/dist/leaflet.browser.print.min.js' %}"></script>
+    <script src="{% static 'leaflet_browser_print/dist/leaflet.browser.print.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/map_and_layer_definitions.js' %}"></script>
-    
     <script type="text/javascript" src="{% static 'js/handle_map.js' %}"></script>
 
-   
+
+
+   <style>
+.leaflet-control-layers-toggle:after{ 
+    content:"Select Layer";
+    /*width:20px; */
+    color:#fff;
+    font-weight: bold;
+
+}
+.leaflet-control-layers-toggle{ 
+    width:150px;
+
+    background-position:110px ;
+    background-color: #000;
+    padding:3px;
+    padding-left:20px;
+    text-decoration:none;
+    line-height:30px;
+}
+</style>
     
 </body>
 
